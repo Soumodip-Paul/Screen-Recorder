@@ -1,15 +1,22 @@
-var video = document.querySelector('.recording');
-var output = document.querySelector('.output');
-var start = document.querySelector('.start-btn');
-var stop = document.querySelector('.stop-btn');
-var anc = document.querySelector(".download-anc")
+var video = document.querySelector('#recording');
+var output = document.querySelector('#output');
+var start = document.querySelector('#start-btn');
+var stop = document.querySelector('#stop-btn');
+var anc = document.querySelector("#download-anc")
+var audio_btn = document.querySelector("#audio_check")
 var data = [];
+var hidden = true;
+// let desktop_audio = false;
 const options = { mimeType: "video/webm; codecs=vp9" };
 // In order record the screen with system audio
 
 start.addEventListener('click', (e) => {
-
+	
 	data = []
+	if (!hidden) {
+		anc.classList.toggle('hidden')
+		hidden = false
+	}
 	recordScreen()
 });
 
@@ -22,21 +29,42 @@ const recordScreen = async () => {
 		},
 		audio: true,
 	})
-	// .then(async (e) => {
 
-	// For recording the mic audio
-	const get_audio = confirm("Do you want to record mic audio")
-	
 	let audio = await navigator.mediaDevices.getUserMedia({
-		audio: get_audio, video: false
+		audio: true, video: false
 	})
+	audio.getTracks()[0].enabled = audio_btn.checked
+
+	audio_btn.onclick = ev => {
+
+		audio.getTracks()[0].enabled = audio_btn.checked
+	}
+
+	let FinalAudioStream = audio;
+	if (e.getAudioTracks().length != 0) {
+		const audioContext = new AudioContext();
+		const DesktopAudio = new MediaStream();
+		DesktopAudio.addTrack(e.getAudioTracks()[0])
+
+		const MicAudio = new MediaStream();
+		MicAudio.addTrack(audio.getAudioTracks()[0])
+
+		const audioIn_01 = audioContext.createMediaStreamSource(DesktopAudio);
+		const audioIn_02 = audioContext.createMediaStreamSource(MicAudio);
+
+		const dest = audioContext.createMediaStreamDestination();
+
+		audioIn_01.connect(dest);
+		audioIn_02.connect(dest);
+		FinalAudioStream = dest.stream;
+	}
 
 	// Assign the recorded mediastream to the src object
 	video.srcObject = e;
 
 	// Combine both video/audio stream with MediaStream object
 	let combine = new MediaStream(
-		[...e.getTracks(), ...audio.getTracks()])
+		[...e.getVideoTracks(), ...FinalAudioStream.getTracks()])
 
 	/* Record the captured mediastream
 	with MediaRecorder constructor */
@@ -47,7 +75,9 @@ const recordScreen = async () => {
 
 	stop.addEventListener('click', (event) => {
 		// Stops the recording
+		console.log(recorder)
 		recorder.stop();
+		console.log(recorder)
 		alert("recording stopped")
 		video.srcObject = null
 		e.getTracks().forEach(track => track.stop())
@@ -56,7 +86,8 @@ const recordScreen = async () => {
 
 	e.getVideoTracks().forEach(track => {
 		track.addEventListener("ended", ev => {
-			recorder.stop();
+			if (recorder.state !== 'inactive')
+				recorder.stop();
 			alert("recording stopped")
 			video.srcObject = null
 			audio.getTracks().forEach(track => track.stop())
@@ -71,7 +102,7 @@ const recordScreen = async () => {
 	recorder.onstop = () => {
 
 		/* Convert the recorded audio */
-		let blobData = new Blob(data,options);
+		let blobData = new Blob(data, options);
 
 		// Convert the blob data to a url
 		let url = URL.createObjectURL(blobData)
@@ -79,6 +110,7 @@ const recordScreen = async () => {
 		// Assign the url to the output video tag and anchor
 		output.src = url
 		anc.href = url
+		anc.classList.remove('hidden')
 	};
 	// });
 

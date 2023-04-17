@@ -2,27 +2,117 @@
 
 <head>
 	<meta charset="UTF-8" />
-
-	<link rel="stylesheet" type="text/css"
-		href="output.css" />
-	<title>Screen Recording with client
-		side javascript</title>
+	<link rel="stylesheet" type="text/css" href="output.css" />
+	<title>About | Screen Recorder</title>
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
 </head>
 
-<body>
-	<div style="float: left">
-		<video class="recording" autoplay muted width="500px"
-			height="500px"></video>
-	</div>
-	<div>
-		<h1>OUTPUT</h1>
-		<video class="output" autoplay controls width="500px"
-			height="500px"></video>
-
-		<button class="start-btn">Start Recording</button>
-		<button class="stop-btn">Stop Recording</button>
-		<a href="#" download="output.webm"
-		class="download-anc">Download</a>
-	</div>
+<body class="no-scroll flex flex-col">
+	<header class="text-gray-600 bg-gray-100 body-font">
+		<div class="container mx-auto flex flex-wrap p-4 flex-col md:flex-row items-center">
+			<nav class="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
+				<a class="mr-5 hover:text-gray-900 font-bold" href="/">Home</a>
+				<a class="mr-5 hover:text-gray-900" href="/about.html">About</a>
+				<a class="mr-5 hover:text-gray-900" href="/privacy.html">Privacy</a>
+				<!-- <a class="hover:text-gray-900">Fourth Link</a> -->
+			</nav>
+			<a
+				class="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center text-gray-900 lg:items-center lg:justify-center mb-4 md:mb-0">
+				<img src="favicon-32x32.png" alt="Icon" srcset="favicon-16x16.png"
+					class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full">
+				<span class="ml-3 text-xl">Screen Capture</span>
+			</a>
+			<div class="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
+				<button
+					class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Button
+					<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+						stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+						<path d="M5 12h14M12 5l7 7-7 7"></path>
+					</svg>
+				</button>
+			</div>
+		</div>
+	</header>
+	<section class="text-gray-600 body-font flex flex-col mb-auto">
+		<div class="container px-5 py-4 mx-auto">
+			<div class="flex flex-wrap -mx-4 -mb-10 text-center">
+				<div class="lg:w-1/2 w-full mb-10 px-4 py-2 ">
+					<h2 class="title-font text-2xl font-medium text-gray-900 mt-6 mb-3">Source</h2>
+					<video autoplay muted id="recording" class=" w-full h-full rounded bg-gray-600"></video>
+				</div>
+				<div class="lg:w-1/2 w-full mb-10 px-4 py-2">
+					<h2 class="title-font text-2xl font-medium text-gray-900 mt-6 mb-3">Output</h2>
+					<video id="output" class=" w-full h-full rounded" autoplay controls></video>
+				</div>
+				<div class="w-full mb-10 px-4 py-2">
+					<div class="flex justify-center mt-6 mb-3">
+						<button id="start-btn"
+							class="inline-flex text-white bg-green-500 border-0 py-2 px-6 m-2 focus:outline-none hover:bg-green-600 rounded text-md">Start
+							Recording</button>
+						<button id="stop-btn"
+							class="inline-flex text-white bg-red-500 border-0 py-2 px-6 m-2 focus:outline-none hover:bg-red-600 rounded text-md">Stop
+							Recording</button>
+						<!-- <button id="audio-btn"
+							class="inline-flex text-white bg-pink-500 border-0 py-2 px-6 m-2 focus:outline-none hover:bg-pink-600 rounded text-md">Audio
+							Off</button> -->
+						<label class="inline-flex py-2 px-6 m-2 focus:outline-none text-md hover:cursor-pointer" for="audio_check">
+							<input
+								class="mr-2 mt-[0.3rem] h-3.5 w-8 appearance-none rounded-[0.4375rem] bg-neutral-300 before:pointer-events-none before:absolute before:h-3.5 before:w-3.5 before:rounded-full before:bg-transparent before:content-[''] after:absolute after:z-[2] after:-mt-[0.1875rem] after:h-5 after:w-5 after:rounded-full after:border-none after:bg-neutral-100 after:shadow-[0_0px_3px_0_rgb(0_0_0_/_7%),_0_2px_2px_0_rgb(0_0_0_/_4%)] after:transition-[background-color_0.2s,transform_0.2s] after:content-[''] checked:bg-green-500 checked:after:absolute checked:after:z-[2] checked:after:-mt-[3px] checked:after:ml-[1.0625rem] checked:after:h-5 checked:after:w-5 checked:after:rounded-full checked:after:border-none checked:after:bg-primary checked:after:shadow-[0_3px_1px_-2px_rgba(0,0,0,0.2),_0_2px_2px_0_rgba(0,0,0,0.14),_0_1px_5px_0_rgba(0,0,0,0.12)] checked:after:transition-[background-color_0.2s,transform_0.2s] checked:after:content-[''] hover:cursor-pointer focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[3px_-1px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-5 focus:after:w-5 focus:after:rounded-full focus:after:content-[''] checked:focus:border-primary checked:focus:bg-primary checked:focus:before:ml-[1.0625rem] checked:focus:before:scale-100 checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:bg-neutral-600 dark:after:bg-neutral-400 dark:checked:bg-primary dark:checked:after:bg-primary dark:focus:before:shadow-[3px_-1px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca]"
+								type="checkbox" role="switch" id="audio_check" />
+							Mic Audio</label>
+						<a href="#" download="output.webm" id="download-anc"
+							class="m-2 hidden text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-md">Download</a>
+					</div>
+				</div>
+			</div>
+	</section>
+	<footer class="text-gray-600 bg-gray-100 py-4 body-font mt-3 ">
+		<div class="container px-5 mx-auto flex items-center sm:flex-row flex-col">
+			<a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+				<img src="favicon-16x16.png" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" alt="Logo">
+				<span class="ml-3 text-xl">Screen Capture</span>
+			</a>
+			<p class="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">©
+				2020 Soumodip Paul —
+				<a href="https://github.com/Soumodip-Paul" class="text-gray-600 ml-1" rel="noopener noreferrer"
+					target="_blank">@Soumodip-Paul</a>
+			</p>
+			<span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start ">
+				<a class="text-gray-500 hidden" href="">
+					<svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						class="w-5 h-5" viewBox="0 0 24 24">
+						<path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+					</svg>
+				</a>
+				<a class="ml-3 text-gray-500" href="https://twitter.com/soumodippaul6">
+					<svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						class="w-5 h-5" viewBox="0 0 24 24">
+						<path
+							d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+						</path>
+					</svg>
+				</a>
+				<a class="ml-3 text-gray-500" href="https://instagram.com/soumodippaul64">
+					<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+						stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+						<rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+						<path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+					</svg>
+				</a>
+				<a class="ml-3 text-gray-500" href="https://linkedin.com/in/soumodip-paul-10032002">
+					<svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+						stroke-width="0" class="w-5 h-5" viewBox="0 0 24 24">
+						<path stroke="none"
+							d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z">
+						</path>
+						<circle cx="4" cy="4" r="2" stroke="none"></circle>
+					</svg>
+				</a>
+			</span>
+		</div>
+	</footer>
 	<script src="script.js"></script>
 </body>
